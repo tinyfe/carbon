@@ -1,11 +1,11 @@
-# `get-pkg-by-path`
+# `@lerna-quick-start/module`
 
 > TODO: description
 
 ## Usage
 
 ```
-const getPkgByPath = require('get-pkg-by-path');
+const module = require('@lerna-quick-start/module');
 
 // TODO: DEMONSTRATE API
 ```

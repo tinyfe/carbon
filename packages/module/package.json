@@ -1,5 +1,5 @@
 {
-  "name": "module",
+  "name": "@lerna-quick-start/module",
   "version": "0.0.1",
   "description": "lerna get package info by path",
   "keywords": [
@@ -7,10 +7,13 @@
     "package"
   ],
   "author": "Rain120 <1085131904@qq.com>",
-  "homepage": "",
-  "license": "MIT",
+  "homepage": "https://github.com/Rain120/lerna-quick-start#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "module": "lib/index.es.js",
+  "browser": "lib/browser.js",
   "typings": "types/index.d.ts",
   "engines": {
     "node": ">=8.0.0"
@@ -23,18 +26,18 @@
     "lib"
   ],
   "scripts": {
-    "build": "rollup -c --watch",
     "test": "jest --watch"
   },
   "devDependencies": {
-    "@rollup/plugin-babel": "^5.2.2",
-    "@rollup/plugin-commonjs": "^17.0.0",
-    "@rollup/plugin-typescript": "^8.0.0",
-    "@types/jest": "^26.0.16",
-    "@types/node": "^14.14.10",
-    "jest": "^26.6.3",
-    "rollup": "^2.34.1",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-node": "^9.1.0"
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.25"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rain120/lerna-quick-start.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Rain120/lerna-quick-start/issues"
   }
 }
