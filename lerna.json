@@ -6,8 +6,7 @@
   "command": {
     "publish": {
       "ignoreChanges": ["**/*.md", "__tests__"],
-      "allowBranch": "master",
-      "conventionalCommits": true
+      "allowBranch": "master"
     },
     "run": {
       "stream": true
