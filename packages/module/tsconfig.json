@@ -11,5 +11,5 @@
     "lib": ["es6", "es7", "DOM"]
   },
   "files": ["src/index.ts"],
-  "include": ["src/**/*", "types/**/*"]
+  "include": ["src/**/*", "typings/**/*"]
 }

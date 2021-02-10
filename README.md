@@ -36,9 +36,67 @@ Welcome to the Lerna Quick Start.
 
 ### 🔨 Usage
 
+```sh
+git clone https://github.com/Rain120/lerna-quick-start.git
+
+# 还在计划写一个 cli
+mv lerna-quick-start your-name
+```
+
 #### Scripts
 
-`npm run bootstrap`: 安装所有依赖项并链接任何交叉依赖。
+- Lerna
+
+  `npm run bootstrap`: 安装所有依赖项并链接任何交叉依赖
+
+  `npm run cleanup`: 从所有包中删除 `node_modules` 目录
+
+  `npm run publish`: 发布
+
+  - `--skip-git`: 发布将发布到 `npm` 而不运行任何 `git` 命令。
+
+  - `--skip-npm`: 跳过 `npm` 发布
+
+  - `--force-publish`: `publish` 将强制发布指定的包(以逗号分隔)或使用的所有包
+
+  **Note: 请先登录你的 [npm](https://www.npmjs.com/) 账号**
+
+- Rollup Watch
+
+  `npm run watch:umd`: 监听自动打包`umd`格式
+
+  `npm run watch:module`: 监听自动打包`es & cjs`格式
+
+  `BUILD_PATH="module1;module2" npm run watch:module`: 监听多个模块自动打包
+
+- Rollup Build
+
+  **Important: 请务必在 `package.json` 中设置下面三个属性(这三个属性的值, 对应着打包输出 `path`)。**
+
+  ```json
+  {
+    // module cjs
+    "main": "lib/index.js",
+    // module es
+    "module": "lib/index.es.js",
+    // umd
+    "browser": "lib/browser.js"
+  }
+  ```
+
+  `npm run build:umd`: 通用模块定义, 以 `amd`, `cjs` 和 `iife` 为一体
+
+  `npm run build:module`:
+
+  - `es`: 将软件包保存为 `ES` 模块文件
+
+  - `cjs`: `CommonJS`, 适用于 `Node` 或 `Browserify / webpack`
+
+  `npm run build:all`: `build umd & build module`。
+
+  **Note: 以上 3 种方式都是将 `packages/src/index.ts` 作为入口，打包所有 `package`。**
+
+  `BUILD_PLAN="module1;module2" npm run build:all`: 制定`package`包进行打包。
 
 ### 👨‍🏭 Author
 
