@@ -1,6 +1,6 @@
 'use strict';
 
-const getSomethings = require('..');
+import getSomethings from '../src';
 
 describe('module', () => {
   test('getSomethings', () => {

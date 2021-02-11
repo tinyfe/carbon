@@ -6,7 +6,7 @@
   "command": {
     "publish": {
       "ignoreChanges": ["**/*.md", "__tests__"],
-      "allowBranch": "master",
+      "allowBranch": "main",
       "message": "chore(release): publish"
     },
     "run": {
