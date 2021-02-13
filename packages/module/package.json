@@ -39,5 +39,8 @@
   },
   "bugs": {
     "url": "https://github.com/Rain120/lerna-quick-start/issues"
+  },
+  "dependencies": {
+    "@tinyfe/color-keywords": "0.0.3"
   }
 }

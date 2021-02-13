@@ -6,17 +6,19 @@ import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
+import camelCase from 'camelcase';
 
-let { NODE_ENV, BUILD_PATH } = process.env;
-
-if (typeof BUILD_PATH === 'string') {
-  BUILD_PATH = BUILD_PATH.split(';');
+let { NODE_ENV, BUILD_PATH = '*' } = process.env;
+function toGlobalName(pkgName) {
+  return camelCase(pkgName);
 }
+
+BUILD_PATH = BUILD_PATH.split(';').filter(Boolean);
 
 const pkgsRoot = path.join(__dirname, 'packages');
 const pkgs = fs
   .readdirSync(pkgsRoot)
-  .filter(dir => BUILD_PATH.includes(dir))
+  .filter(dir => BUILD_PATH.includes('*') || BUILD_PATH.includes(dir))
   .map(dir => path.join(pkgsRoot, dir))
   .map(location => {
     return {
@@ -39,8 +41,13 @@ const commonPlugins = [
 
 function config({ location, pkgJson }) {
   const input = path.join(location, 'src', 'index.ts');
+
   const external = Object.keys(pkgJson.dependencies || {});
-  const name = pkgJson.name;
+  const globalName = toGlobalName(pkgJson.name);
+  const globals = {};
+  external.forEach(pkgName => {
+    globals[pkgName] = toGlobalName(pkgName);
+  });
   commonPlugins.push(
     replace({
       __buildVersion: pkgJson.version,
@@ -63,10 +70,11 @@ function config({ location, pkgJson }) {
 
       return {
         input,
+        external: globalName === '' ? {} : external,
         output: [
           {
             file,
-            name,
+            name: globalName,
             format: 'umd',
             sourcemap: false,
             globals,
@@ -93,8 +101,8 @@ function config({ location, pkgJson }) {
             // CommonJS, 适用于 Node 或 Browserify / webpack
             format: 'cjs',
             file: path.join(location, pkgJson.main),
-            // exports: 'auto',
-            // sourcemap: true,
+            exports: 'auto',
+            sourcemap: true,
           },
         ],
         plugins,
