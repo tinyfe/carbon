@@ -1,12 +1,12 @@
 {
-  "name": "lerna-quick-start",
+  "name": "carbon",
   "version": "1.0.0",
-  "description": "(WIP) lerna quick start",
+  "description": "(WIP) carbon",
   "license": "MIT",
   "private": true,
   "author": "Rain120 <1085131904@qq.com>",
   "repository": {
-    "git": "https://github.com/Rain120/lerna-quick-start.git"
+    "git": "git@github.com:tinyfe/carbon.git"
   },
   "maintainers": [
     {
@@ -90,6 +90,6 @@
     "shelljs": "^0.8.4",
     "ts-jest": "^26.4.4",
     "tslib": "^2.0.3",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.5"
   }
 }

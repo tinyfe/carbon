@@ -31,16 +31,17 @@ jobs:
           parallel: true
           path-to-lcov: ./coverage/lcov.info
 
-      # - name: Coveralls Finished
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.ACCESS_TOKEN }}
-      #     parallel-finished: true
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.ACCESS_TOKEN }}
+          parallel-finished: true
 
-      # - name: Deploy
-      #   uses: JamesIves/github-pages-deploy-action@master
-      #   env:
-      #     ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      #     BRANCH: gh-pages
-      #     FOLDER: docs/.vuepress/dist
-      #     BUILD_SCRIPT: npm run deploy
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@master
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: site/.next/dist
+          BUILD_SCRIPT: npm run deploy
+          CLEAN: true

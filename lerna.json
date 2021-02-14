@@ -2,7 +2,7 @@
   "version": "independent",
   "npmClient": "npm",
   "useWorkspaces": false,
-  "packages": ["packages/*"],
+  "packages": ["packages/*", "plugins/*"],
   "command": {
     "publish": {
       "ignoreChanges": ["**/*.md", "__tests__"],

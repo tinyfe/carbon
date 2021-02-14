@@ -15,17 +15,28 @@ function toGlobalName(pkgName) {
 
 BUILD_PATH = BUILD_PATH.split(';').filter(Boolean);
 
-const pkgsRoot = path.join(__dirname, 'packages');
-const pkgs = fs
-  .readdirSync(pkgsRoot)
-  .filter(dir => BUILD_PATH.includes('*') || BUILD_PATH.includes(dir))
-  .map(dir => path.join(pkgsRoot, dir))
-  .map(location => {
-    return {
-      location,
-      pkgJson: require(path.resolve(location, 'package.json')),
-    };
-  });
+let pkgs = [];
+
+const paths = ['packages', 'plugins'];
+
+paths.forEach(pkgPath => {
+  const pkgsRoot = path.join(__dirname, pkgPath);
+  const currentFilePath = fs.readdirSync(pkgsRoot);
+  if (currentFilePath.length) {
+    pkgs.concat(
+      currentFilePath
+        .filter(dir => BUILD_PATH.includes('*') || BUILD_PATH.includes(dir))
+        .map(dir => path.join(pkgsRoot, dir))
+        .map(location => {
+          return {
+            location,
+            pkgJson: require(path.resolve(location, 'package.json')),
+          };
+        }),
+    );
+  }
+});
+console.log({ pkgs: JSON.stringify(pkgs) });
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 

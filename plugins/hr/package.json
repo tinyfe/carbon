@@ -1,0 +1,38 @@
+{
+  "name": "@tinyfe/hr",
+  "version": "0.0.1",
+  "description": "slate plugin for hr",
+  "keywords": [
+    "editor",
+    "hr",
+    "plugin",
+    "slate-editor"
+  ],
+  "author": "Rain120 <chao1202016@outlook.com>",
+  "homepage": "https://github.com/tinyfe/carbon#readme",
+  "license": "ISC",
+  "main": "lib/hr.js",
+  "module": "lib/hr.es.js",
+  "browser": "lib/browser.js",
+  "typings": "typings/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinyfe/carbon.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/tinyfe/carbon/issues"
+  }
+}
