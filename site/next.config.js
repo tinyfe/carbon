@@ -16,7 +16,7 @@ const cssConfig = {
 };
 
 const lessConfig = {
-  distDir: 'dist',
+  // distDir: 'dist',
   lessLoaderOptions: {
     javascriptEnabled: true,
     modifyVars: themeVariables,

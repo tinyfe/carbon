@@ -42,6 +42,6 @@ jobs:
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: site/.next/dist
+          FOLDER: site/out
           BUILD_SCRIPT: npm run deploy
           CLEAN: true
