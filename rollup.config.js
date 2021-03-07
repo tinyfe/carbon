@@ -7,47 +7,75 @@ import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import camelCase from 'camelcase';
+import typescript from 'rollup-plugin-typescript2';
+import json from 'rollup-plugin-json';
+import builtins from 'rollup-plugin-node-builtins';
 
-let { NODE_ENV, BUILD_PATH = '*' } = process.env;
+const ALL = '*';
+
+let { NODE_ENV, BUILD = ALL, BUILD_PKG = ALL } = process.env;
 function toGlobalName(pkgName) {
   return camelCase(pkgName);
 }
 
-BUILD_PATH = BUILD_PATH.split(';').filter(Boolean);
+BUILD_PKG = BUILD_PKG.split(';').filter(Boolean);
+BUILD = BUILD.split(';').filter(Boolean);
+
+const FILTER_PATH = ['__template__'];
+
+console.log({ BUILD_PKG, BUILD });
 
 let pkgs = [];
 
-const paths = ['packages', 'plugins'];
+const paths = ['packages', 'plugins'].filter(_ => BUILD.includes(ALL) || BUILD.includes(_));
 
 paths.forEach(pkgPath => {
   const pkgsRoot = path.join(__dirname, pkgPath);
   const currentFilePath = fs.readdirSync(pkgsRoot);
   if (currentFilePath.length) {
-    pkgs.concat(
-      currentFilePath
-        .filter(dir => BUILD_PATH.includes('*') || BUILD_PATH.includes(dir))
-        .map(dir => path.join(pkgsRoot, dir))
-        .map(location => {
-          return {
-            location,
-            pkgJson: require(path.resolve(location, 'package.json')),
-          };
-        }),
-    );
+    const filePath = currentFilePath
+      .filter(dir => !FILTER_PATH.includes(dir))
+      .filter(dir => BUILD_PKG.includes(ALL) || BUILD_PKG.includes(dir))
+      .map(dir => path.join(pkgsRoot, dir))
+      .map(location => {
+        return {
+          location,
+          pkgJson: require(path.resolve(location, 'package.json')),
+        };
+      });
+    pkgs = [...pkgs, ...filePath];
   }
 });
-console.log({ pkgs: JSON.stringify(pkgs) });
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
 const commonPlugins = [
+  commonjs(),
+  // Convert JSON imports to ES6 modules.
+  json(),
+  // Register Node.js builtins for browserify compatibility.
+  builtins(),
   resolve({ extensions, preferBuiltins: true }),
   babel({
     extensions,
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          modules: false,
+          targets: {
+            node: 'current',
+          },
+        },
+      ],
+      '@babel/preset-react',
+      '@babel/preset-typescript',
+    ],
     babelHelpers: 'bundled',
     exclude: ['node_modules/**', 'packages/**/node_modules/**'],
+    extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.ts', '.tsx'],
+    // runtimeHelpers: true,
   }),
-  commonjs(),
 ];
 
 function config({ location, pkgJson }) {
@@ -59,16 +87,27 @@ function config({ location, pkgJson }) {
   external.forEach(pkgName => {
     globals[pkgName] = toGlobalName(pkgName);
   });
+
   commonPlugins.push(
     replace({
       __buildVersion: pkgJson.version,
     }),
   );
 
+  const tsPlugin = typescript({
+    abortOnError: false,
+    clean: true,
+    include: [path.join(location, 'src/**/*.ts')],
+    rollupCommonJSResolveHack: true,
+    tsconfig: path.join(location, 'tsconfig.json'),
+    declarationDir: path.join(location, 'lib/@types'),
+    useTsconfigDeclarationDir: true,
+  });
+  const plugins = [tsPlugin, ...commonPlugins];
+
   return {
     umd: compress => {
       let file = path.join(location, 'lib', 'browser.js');
-      const plugins = [...commonPlugins];
       if (compress) {
         plugins.push(terser());
         file = path.join(location, 'lib', 'browser.min.js');
@@ -87,6 +126,7 @@ function config({ location, pkgJson }) {
             file,
             name: globalName,
             format: 'umd',
+            exports: 'named',
             sourcemap: false,
             globals,
           },
@@ -95,7 +135,6 @@ function config({ location, pkgJson }) {
       };
     },
     module: () => {
-      const plugins = [...commonPlugins];
       return {
         inlineDynamicImports: true,
         input,
